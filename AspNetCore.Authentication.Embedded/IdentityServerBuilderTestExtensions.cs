@@ -1,4 +1,5 @@
 ﻿using IdentityModel;
+using IdentityServer4;
 using IdentityServer4.Models;
 using IdentityServer4.Validation;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,8 +28,8 @@ namespace AspNetCore.Authentication.Embedded
                     },
                     AllowedScopes = new[]
                     {
-                        "contacts.manage",
-                        "contacts.view"
+                        "orders.manage",
+                        "orders.view"
                     }
                 },
                 new Client
@@ -44,20 +45,24 @@ namespace AspNetCore.Authentication.Embedded
                     },
                     AllowedScopes = new[]
                     {
-                        "contacts.view"
-                    }
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        "orders.view",
+                        "orders.place"
+                    },
+                    AllowOfflineAccess = true
                 }
             });
 
         public static IIdentityServerBuilder AddTestResources(this IIdentityServerBuilder builder) =>
             builder.AddInMemoryApiResources(new[]
             {
-                new ApiResource("dev.contacts.api")
+                new ApiResource("dev.shop.api")
                 {
                     Scopes =
                     {
-                        new Scope("contacts.manage"),
-                        new Scope("contacts.view")
+                        new Scope("orders.manage"),
+                        new Scope("orders.view"),
+                        new Scope("orders.place")
                     },
                     Enabled = true,
                     UserClaims = new[]
@@ -67,6 +72,9 @@ namespace AspNetCore.Authentication.Embedded
                         JwtClaimTypes.Email
                     }
                 },
+            }).AddInMemoryIdentityResources(new IdentityResource[] {
+                new IdentityResources.OpenId(),
+                new IdentityResources.Profile()
             });
 
         public static IIdentityServerBuilder AddInMemoryUsers(this IIdentityServerBuilder builder)
