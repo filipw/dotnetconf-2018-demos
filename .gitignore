@@ -329,3 +329,4 @@ ASALocalRun/
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
 /AspNetCore.Authentication.Embedded/tempkey.rsa
+/src/AspNetCore.Authentication.Embedded/*.rsa
